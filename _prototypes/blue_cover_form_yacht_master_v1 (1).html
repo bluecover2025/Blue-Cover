@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assurance Yachting - Blue Cover</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap");
+        @font-face {
+            font-family: "Causten";
+            src: url("https://fonts.cdnfonts.com/s/29862/Causten-Bold.woff") format("woff");
+            font-weight: 700;
+            font-style: normal;
+        }
+        body { 
+            font-family: "DM Sans", sans-serif; 
+            background: radial-gradient(circle at top right, #F1F5F9 0%, #E2E8F0 100%);
+            color: #0A1931; 
+            min-height: 100vh;
+        }
+        h1, h2, h3, .font-causten { font-family: "Causten", sans-serif; color: #0A1931; }
+        .text-gold { color: #C5A059; }
+        .bg-royal { background-color: #0A1931; }
+        .form-container { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            border-radius: 16px; 
+            box-shadow: 0 25px 50px -12px rgba(10, 25, 49, 0.15); 
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+        }
+        .progress-fill { height: 100%; background-color: #C5A059; transition: width 0.4s ease; }
+        .input-field { background-color: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px 15px; border-radius: 8px; width: 100%; transition: all 0.2s; }
+        .input-field:focus { border-color: #C5A059; background-color: #FFFFFF; outline: none; box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1); }
+        .btn-primary { background-color: #0A1931; color: #FFFFFF; padding: 14px 28px; border-radius: 8px; font-weight: bold; transition: all 0.3s; }
+        .btn-primary:hover { background-color: #1A2A40; transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgba(10, 25, 49, 0.3); }
+        .btn-secondary { background-color: transparent; border: 1px solid #0A1931; color: #0A1931; padding: 14px 28px; border-radius: 8px; font-weight: bold; }
+        .form-step { display: none; }
+        .form-step.active { display: block; }
+        .radio-option, .checkbox-option { display: flex; align-items: center; padding: 16px; border: 1px solid #E2E8F0; border-radius: 10px; cursor: pointer; background: #FFFFFF; transition: all 0.2s; }
+        .radio-option:hover, .checkbox-option:hover { border-color: #C5A059; background-color: #FFFDF9; }
+        input[type="radio"], input[type="checkbox"] { margin-right: 12px; width: 18px; height: 18px; accent-color: #C5A059; }
+        .logo-img { height: 50px; width: auto; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-4xl w-full">
+        <div class="flex justify-between items-center mb-10">
+            <div class="logo-container">
+                <h2 class="text-2xl font-causten text-royal">Blue Cover</h2>
+                <p class="text-[10px] uppercase tracking-widest text-gold font-bold mt-1">Private Insurance Brokerage</p>
+            </div>
+            <div class="text-right">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Étape <span id="step-num">1</span>/6</span>
+                <div class="w-32 h-1.5 bg-slate-200 rounded-full mt-2 overflow-hidden">
+                    <div id="progress" class="progress-fill" style="width: 16.6%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-container p-12">
+            <form id="form" class="space-y-8">
+                <!-- Étape 1: Contact & Identification -->
+                <div class="form-step active" data-step="1">
+                    <h3 class="text-2xl font-causten mb-2">1. Vos Coordonnées</h3>
+                    <p class="text-slate-500 text-sm mb-8">Informations de contact et d'identification.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Prénom</label>
+                            <input type="text" name="first_name" class="input-field" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nom</label>
+                            <input type="text" name="last_name" class="input-field" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Société (optionnel)</label>
+                            <input type="text" name="company" class="input-field">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email</label>
+                            <input type="email" name="email" class="input-field" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Téléphone / WhatsApp</label>
+                            <div class="flex space-x-2">
+                                <select id="phone-prefix" class="input-field w-1/3"></select>
+                                <input type="tel" name="phone" class="input-field w-2/3" placeholder="Numéro" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Préférence de communication</label>
+                            <select name="contact_pref" class="input-field">
+                                <option value="email">Email</option>
+                                <option value="phone">Téléphone</option>
+                                <option value="whatsapp">WhatsApp</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pays de résidence</label>
+                            <input type="text" id="country-input" name="country" class="input-field" placeholder="Pays..." list="country-list" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ville</label>
+                            <input type="text" id="city-input" name="city" class="input-field" placeholder="Ville..." list="city-list" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nationalité</label>
+                            <input type="text" name="nationality" class="input-field" placeholder="Nationalité..." list="country-list" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Date d'effet souhaitée</label>
+                            <input type="date" name="effective_date" class="input-field" required>
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-12"><button type="button" class="btn-primary" onclick="nextStep()">Étape Suivante</button></div>
+                </div>
+
+                <!-- Étape 2: Détails du Yacht -->
+                <div class="form-step" data-step="2">
+                    <h3 class="text-2xl font-causten mb-2">2. Détails du Yacht</h3>
+                    <p class="text-slate-500 text-sm mb-8">Caractéristiques techniques du navire.</p>
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Marque</label>
+                                <input type="text" name="yacht_make" class="input-field" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Modèle</label>
+                                <input type="text" name="yacht_model" class="input-field" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Année</label>
+                                <input type="number" name="yacht_year" class="input-field" required>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Immatriculation (IMO)</label>
+                                <input type="text" name="yacht_imo" class="input-field" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tonnage Brut</label>
+                                <input type="number" name="yacht_tonnage" class="input-field" min="0" required>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Valeur (€)</label>
+                                <input type="number" name="yacht_value" class="input-field" min="0" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Port d'attache</label>
+                                <input type="text" name="yacht_port" class="input-field" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-12"><button type="button" class="btn-secondary" onclick="prevStep()">Retour</button><button type="button" class="btn-primary" onclick="nextStep()">Étape Suivante</button></div>
+                </div>
+
+                <!-- Étape 3: Usage & Couverture -->
+                <div class="form-step" data-step="3">
+                    <h3 class="text-2xl font-causten mb-2">3. Usage & Couverture</h3>
+                    <p class="text-slate-500 text-sm mb-8">Comment utilisez-vous votre yacht ?</p>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Usage du yacht</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <label class="checkbox-option"><input type="checkbox" name="usage" value="private"> Privé</label>
+                                <label class="checkbox-option"><input type="checkbox" name="usage" value="charter"> Charter</label>
+                                <label class="checkbox-option"><input type="checkbox" name="usage" value="business"> Affaires</label>
+                                <label class="checkbox-option"><input type="checkbox" name="usage" value="other"> Autre</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Besoin de couverture</label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <label class="checkbox-option"><input type="checkbox" name="coverage" value="pi"> P&I</label>
+                                <label class="checkbox-option"><input type="checkbox" name="coverage" value="hm"> H&M</label>
+                                <label class="checkbox-option"><input type="checkbox" name="coverage" value="crew"> Équipage</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Zone de navigation</label>
+                            <select name="navigation_zone" class="input-field">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="worldwide">Monde entier</option>
+                                <option value="mediterranean">Mer Méditerranée</option>
+                                <option value="caribbean">Caraïbes</option>
+                                <option value="other">Autre</option>
+                            </select>
+                            <textarea id="nav-other" name="navigation_other" class="input-field mt-4 hidden" placeholder="Précisez..."></textarea>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-12"><button type="button" class="btn-secondary" onclick="prevStep()">Retour</button><button type="button" class="btn-primary" onclick="nextStep()">Étape Suivante</button></div>
+                </div>
+
+                <!-- Étape 4: Équipage & Expérience -->
+                <div class="form-step" data-step="4">
+                    <h3 class="text-2xl font-causten mb-2">4. Équipage & Expérience</h3>
+                    <p class="text-slate-500 text-sm mb-8">Détails sur les personnes à bord.</p>
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nombre de passagers</label>
+                                <input type="number" name="passengers" class="input-field" min="0" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nombre d'équipage</label>
+                                <input type="number" name="crew" class="input-field" min="0" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Heures de vol annuelles</label>
+                                <input type="number" name="annual_hours" class="input-field" min="0" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Expérience du capitaine (heures)</label>
+                            <input type="number" name="captain_hours" class="input-field" min="0" required>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-12"><button type="button" class="btn-secondary" onclick="prevStep()">Retour</button><button type="button" class="btn-primary" onclick="nextStep()">Étape Suivante</button></div>
+                </div>
+
+                <!-- Étape 5: Financement & Détails -->
+                <div class="form-step" data-step="5">
+                    <h3 class="text-2xl font-causten mb-2">5. Financement & Détails</h3>
+                    <p class="text-slate-500 text-sm mb-8">Informations complémentaires.</p>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Financement</label>
+                            <div class="flex space-x-4">
+                                <label class="radio-option flex-1"><input type="radio" name="financing" value="owned" checked> Propriété personnelle</label>
+                                <label class="radio-option flex-1"><input type="radio" name="financing" value="leasing"> Leasing</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Lieu d'entreposage</label>
+                            <div class="flex space-x-4">
+                                <label class="radio-option flex-1"><input type="radio" name="storage" value="hangar" checked> Hangar fermé</label>
+                                <label class="radio-option flex-1"><input type="radio" name="storage" value="outdoor"> Extérieur</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Matériau de coque</label>
+                            <input type="text" name="hull_material" class="input-field" placeholder="Ex: Acier, Aluminium, Fibre de verre">
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-12"><button type="button" class="btn-secondary" onclick="prevStep()">Retour</button><button type="button" class="btn-primary" onclick="nextStep()">Étape Suivante</button></div>
+                </div>
+
+                <!-- Étape 6: Validation -->
+                <div class="form-step" data-step="6">
+                    <h3 class="text-2xl font-causten mb-2">6. Validation & Envoi</h3>
+                    <p class="text-slate-500 text-sm mb-8">Dernière étape avant l'analyse de votre dossier.</p>
+                    <div class="p-6 bg-royal/5 rounded-xl border border-royal/10">
+                        <label class="checkbox-option border-none p-0 bg-transparent">
+                            <input type="checkbox" required> 
+                            <span class="text-sm leading-snug">Je déclare que les renseignements donnés sont exacts et j'autorise <strong>Blue Cover</strong> à traiter mes données.</span>
+                        </label>
+                    </div>
+                    <div class="flex justify-between mt-12"><button type="button" class="btn-secondary" onclick="prevStep()">Retour</button><button type="submit" class="btn-primary">Demander mon offre Yachting</button></div>
+                </div>
+            </form>
+
+            <div id="success" class="hidden text-center py-16">
+                <div class="w-24 h-24 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h3 class="text-3xl font-causten text-royal mb-4">Demande Reçue avec Succès</h3>
+                <p class="text-slate-500 max-w-md mx-auto leading-relaxed">Votre conseiller <strong>Blue Cover</strong> spécialisé en Yachting va analyser votre demande. Vous recevrez une réponse sous 48h.</p>
+                <button type="button" class="mt-10 text-royal font-bold border-b border-royal hover:text-gold hover:border-gold transition-all" onclick="location.reload()">Nouvelle demande</button>
+            </div>
+        </div>
+        
+        <p class="text-center text-slate-400 text-[10px] mt-8 uppercase tracking-widest">© 2026 Blue Cover Private Insurance Brokerage — All Rights Reserved</p>
+    </div>
+
+    <datalist id="country-list"></datalist>
+    <datalist id="city-list"></datalist>
+
+    <script>
+        const countries = [
+            {n:"Afghanistan",p:"+93",c:"AF"},{n:"Afrique du Sud",p:"+27",c:"ZA"},{n:"Albanie",p:"+355",c:"AL"},{n:"Algérie",p:"+213",c:"DZ"},{n:"Allemagne",p:"+49",c:"DE"},{n:"Andorre",p:"+376",c:"AD"},{n:"Angola",p:"+244",c:"AO"},{n:"Arabie saoudite",p:"+966",c:"SA"},{n:"Argentine",p:"+54",c:"AR"},{n:"Australie",p:"+61",c:"AU"},{n:"Autriche",p:"+43",c:"AT"},{n:"Belgique",p:"+32",c:"BE"},{n:"Brésil",p:"+55",c:"BR"},{n:"Canada",p:"+1",c:"CA"},{n:"Chine",p:"+86",c:"CN"},{n:"Égypte",p:"+20",c:"EG"},{n:"Émirats arabes unis",p:"+971",c:"AE"},{n:"Espagne",p:"+34",c:"ES"},{n:"États-Unis",p:"+1",c:"US"},{n:"France",p:"+33",c:"FR"},{n:"Grèce",p:"+30",c:"GR"},{n:"Inde",p:"+91",c:"IN"},{n:"Italie",p:"+39",c:"IT"},{n:"Japon",p:"+81",c:"JP"},{n:"Luxembourg",p:"+352",c:"LU"},{n:"Maroc",p:"+212",c:"MA"},{n:"Mexique",p:"+52",c:"MX"},{n:"Monaco",p:"+377",c:"MC"},{n:"Nigeria",p:"+234",c:"NG"},{n:"Pays-Bas",p:"+31",c:"NL"},{n:"Portugal",p:"+351",c:"PT"},{n:"Qatar",p:"+974",c:"QA"},{n:"Royaume-Uni",p:"+44",c:"GB"},{n:"Russie",p:"+7",c:"RU"},{n:"Singapour",p:"+65",c:"SG"},{n:"Suisse",p:"+41",c:"CH"},{n:"Turquie",p:"+90",c:"TR"}
+        ];
+
+        const hubs = [
+            {v:"Genève",n:"Suisse"},{v:"Zurich",n:"Suisse"},{v:"Paris",n:"France"},{v:"Londres",n:"Royaume-Uni"},{v:"Dubaï",n:"Émirats arabes unis"},{v:"Monaco",n:"Monaco"},{v:"Nice",n:"France"},{v:"Antibes",n:"France"},{v:"Fort Lauderdale",n:"États-Unis"}
+        ];
+
+        const prefixSelect = document.getElementById('phone-prefix');
+        const countryList = document.getElementById('country-list');
+        const cityList = document.getElementById('city-list');
+
+        countries.sort((a,b) => a.n.localeCompare(b.n)).forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.p; opt.innerText = `${c.c} (${c.p})`;
+            if (c.c === "CH") opt.selected = true;
+            prefixSelect.appendChild(opt);
+            const cOpt = document.createElement('option'); cOpt.value = c.n; countryList.appendChild(cOpt);
+        });
+
+        hubs.forEach(h => {
+            const cityOpt = document.createElement('option');
+            cityOpt.value = h.v;
+            cityList.appendChild(cityOpt);
+        });
+
+        document.getElementById('city-input').addEventListener('input', function(e) {
+            const val = e.target.value;
+            const foundHub = hubs.find(h => h.v === val);
+            if (foundHub) {
+                document.getElementById('country-input').value = foundHub.n;
+                const countryData = countries.find(c => c.n === foundHub.n);
+                if (countryData) prefixSelect.value = countryData.p;
+            }
+        });
+
+        document.querySelector('select[name="navigation_zone"]').addEventListener('change', function(e) {
+            document.getElementById('nav-other').classList.toggle('hidden', e.target.value !== 'other');
+        });
+
+        let step = 1;
+        function nextStep() { step++; update(); }
+        function prevStep() { step--; update(); }
+        function update() {
+            document.querySelectorAll('.form-step').forEach((s, i) => s.classList.toggle('active', i+1 === step));
+            document.getElementById('step-num').innerText = step;
+            document.getElementById('progress').style.width = (step / 6 * 100) + '%';
+            window.scrollTo(0,0);
+        }
+        
+        document.getElementById('form').onsubmit = (e) => {
+            e.preventDefault();
+            document.getElementById('form').classList.add('hidden');
+            document.getElementById('success').classList.remove('hidden');
+        };
+    </script>
+</body>
+</html>
