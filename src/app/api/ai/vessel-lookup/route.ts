@@ -80,7 +80,6 @@ export async function POST(request: NextRequest) {
       config: {
         temperature: 0.1,
         tools: [{ googleSearch: {} }],
-        responseMimeType: "application/json" as const,
         systemInstruction: [{ text: SYSTEM_PROMPT }],
       },
       contents: [
@@ -108,7 +107,12 @@ export async function POST(request: NextRequest) {
         ?.map((p: { text?: string }) => p.text)
         ?.join("") || "";
 
-    const parsed = JSON.parse(rawText);
+    // Extract JSON from response (may be wrapped in ```json ... ```)
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return NextResponse.json({ found: false, error: "Impossible de parser la réponse AI." }, { status: 500 });
+    }
+    const parsed = JSON.parse(jsonMatch[0]);
     return NextResponse.json(parsed);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unknown error";
