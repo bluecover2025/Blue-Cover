@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import QuoteForm from "@/components/yacht/QuoteForm";
 

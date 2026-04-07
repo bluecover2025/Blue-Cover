@@ -1,19 +1,19 @@
 import type { NextConfig } from "next";
-import { resolve } from "path";
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
+import createNextIntlPlugin from "next-intl/plugin";
 
-const nextConfig: NextConfig = {
-  turbopack: {
-    resolveAlias: {
-      "next-intl/config": "./src/i18n/request.ts",
-    },
-  },
-  webpack(config) {
-    config.resolve.alias["next-intl/config"] = resolve(
-      process.cwd(),
-      "src/i18n/request.ts"
-    );
-    return config;
-  },
-};
+// Polyfill __dirname for ESM (needed by next-intl plugin on Vercel)
+if (typeof globalThis.__dirname === "undefined") {
+  try {
+    globalThis.__dirname = dirname(fileURLToPath(import.meta.url));
+  } catch {
+    globalThis.__dirname = resolve(".");
+  }
+}
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
+const nextConfig: NextConfig = {};
+
+export default withNextIntl(nextConfig);
