@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface LogoProps {
   size?: "sm" | "md" | "lg";
@@ -6,36 +7,27 @@ interface LogoProps {
   variant?: "dark" | "light";
 }
 
-const sizeMap = {
+const heightMap = {
   sm: 24,
-  md: 28,
-  lg: 36,
+  md: 32,
+  lg: 40,
 };
 
 export default function Logo({ size = "md", href = "/yacht", variant = "dark" }: LogoProps) {
+  const src = variant === "light"
+    ? "/logos/White logo - no background.png"
+    : "/logos/Color logo - no background.png";
+
   return (
-    <Link href={href} className="inline-flex items-center gap-2">
-      <div
-        className="flex items-center justify-center rounded-[8px]"
-        style={{
-          width: sizeMap[size] + 4,
-          height: sizeMap[size] + 4,
-          background: "linear-gradient(135deg, var(--color-blue), var(--color-opal))",
-        }}
-      >
-        <span
-          className="font-serif font-bold text-white"
-          style={{ fontSize: sizeMap[size] * 0.45 }}
-        >
-          BC
-        </span>
-      </div>
-      <span
-        className={`font-serif font-bold ${variant === "light" ? "text-white" : "text-navy"}`}
-        style={{ fontSize: sizeMap[size] * 0.55 }}
-      >
-        Blue Cover
-      </span>
+    <Link href={href} className="inline-flex items-center">
+      <Image
+        src={src}
+        alt="Blue Cover"
+        height={heightMap[size]}
+        width={heightMap[size] * 4}
+        style={{ height: heightMap[size], width: "auto", objectFit: "contain" }}
+        priority
+      />
     </Link>
   );
 }
