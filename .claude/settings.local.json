@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p _prototypes)",
+      "Bash(mv \"blue_cover_form_yacht_master_v1 \\(1\\).html\" \"index \\(5\\).html\" portal.html BlueCover_Yacht_UserJourney_v3.docx _prototypes/)",
+      "Bash(rm -rf BlueCover_Yacht_UserJourney_v3.zip unpacked_journey)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --turbopack --yes)",
+      "Read(//c/Users/CharlesCroce-Spinell/Projects/bluecover/**)",
+      "Bash(npx create-next-app@latest yachting-tmp --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --turbopack --yes)",
+      "Bash(cp -r yachting-tmp/* yachting-tmp/.* yachting/)",
+      "Bash(rm -rf yachting-tmp)",
+      "Bash(cp -r yachting-tmp/package.json yachting-tmp/package-lock.json yachting-tmp/postcss.config.mjs yachting-tmp/tsconfig.json yachting-tmp/public yachting-tmp/src yachting/)",
+      "Bash(npm install:*)",
+      "Bash(npx next:*)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}
