@@ -4,24 +4,19 @@ import Image from "next/image";
 interface LogoProps {
   size?: "sm" | "md" | "lg";
   href?: string;
-  variant?: "dark" | "light";
 }
 
 const heightMap = {
   sm: 24,
-  md: 32,
-  lg: 40,
+  md: 28,
+  lg: 36,
 };
 
-export default function Logo({ size = "md", href = "/yacht", variant = "dark" }: LogoProps) {
-  const src = variant === "light"
-    ? "/logos/White logo - no background.png"
-    : "/logos/Color logo - no background.png";
-
+export default function Logo({ size = "md", href = "/yacht" }: LogoProps) {
   return (
     <Link href={href} className="inline-flex items-center">
       <Image
-        src={src}
+        src="/logos/Color logo - no background.png"
         alt="Blue Cover"
         height={heightMap[size]}
         width={heightMap[size] * 4}

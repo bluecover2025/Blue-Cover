@@ -7,14 +7,14 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  gold: "bg-gold text-navy hover:brightness-110",
+  gold: "bg-gold text-navy-deep hover:brightness-110",
   navy: "bg-navy text-white hover:bg-blue",
   outline: "bg-transparent text-navy border border-navy/20 hover:border-navy/40",
   "outline-light": "bg-transparent text-white border border-white/30 hover:border-white/60",
 };
 
 export default function Button({
-  variant = "navy",
+  variant = "gold",
   className = "",
   children,
   ...props
