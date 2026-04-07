@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Barlow, Barlow_Condensed } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import frMessages from "@/messages/fr.json";
 import enMessages from "@/messages/en.json";
 import "./globals.css";
@@ -38,18 +38,21 @@ const messagesMap: Record<string, Record<string, unknown>> = {
   en: enMessages as unknown as Record<string, unknown>,
 };
 
+async function resolveLocale(): Promise<string> {
+  try {
+    const c = await cookies();
+    const val = c.get("NEXT_LOCALE")?.value;
+    if (val && messagesMap[val]) return val;
+  } catch {}
+  return "fr";
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let locale = "fr";
-  try {
-    const h = await headers();
-    const fromProxy = h.get("x-next-intl-locale");
-    if (fromProxy && messagesMap[fromProxy]) locale = fromProxy;
-  } catch {}
-
+  const locale = await resolveLocale();
   const messages = messagesMap[locale];
 
   return (
