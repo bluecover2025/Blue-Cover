@@ -6,6 +6,12 @@ import Link from "next/link";
 
 const TOTAL_STEPS = 7;
 
+const VESSEL_FIELDS = [
+  "vesselName", "vesselType", "vesselBuilder", "vesselYear", "vesselFlag",
+  "vesselLength", "vesselBeam", "vesselTonnage", "vesselIMO", "vesselPortRegistry",
+  "vesselHomePort", "vesselMaterial", "vesselPassengers", "vesselClass", "vesselEngines",
+] as const;
+
 function StepHeader({ num, title }: { num: number; title: string }) {
   return (
     <div className="flex items-center gap-3 mb-6">
@@ -60,6 +66,9 @@ export default function QuoteForm() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [reference, setReference] = useState("");
+  const [imoLookup, setImoLookup] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [imoError, setImoError] = useState("");
+  const [filledFields, setFilledFields] = useState<string[]>([]);
 
   const update = (key: string, val: string | string[] | boolean) =>
     setData((prev) => ({ ...prev, [key]: val }));
@@ -70,6 +79,42 @@ export default function QuoteForm() {
       "coverages",
       current.includes(cov) ? current.filter((c) => c !== cov) : [...current, cov]
     );
+  };
+
+  const lookupIMO = async () => {
+    const imo = ((data.vesselIMO as string) || "").trim();
+    if (!/^\d{7}$/.test(imo)) {
+      setImoError("Le numéro IMO doit contenir exactement 7 chiffres.");
+      return;
+    }
+    setImoLookup("loading");
+    setImoError("");
+    setFilledFields([]);
+    try {
+      const resp = await fetch("/api/ai/vessel-lookup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imo }),
+      });
+      const result = await resp.json();
+      if (!resp.ok || result.error || result.found === false) {
+        setImoError(result.error || "Navire non trouvé pour ce numéro IMO.");
+        setImoLookup("error");
+        return;
+      }
+      const filled: string[] = [];
+      for (const field of VESSEL_FIELDS) {
+        if (result[field] && result[field] !== "") {
+          update(field, result[field]);
+          filled.push(field);
+        }
+      }
+      setFilledFields(filled);
+      setImoLookup("success");
+    } catch {
+      setImoError("Erreur de connexion. Réessayez.");
+      setImoLookup("error");
+    }
   };
 
   const next = () => setStep((s) => Math.min(s + 1, TOTAL_STEPS));
@@ -165,58 +210,90 @@ export default function QuoteForm() {
       {step === 2 && (
         <div>
           <StepHeader num={2} title={t("step2Title")} />
+
+          {/* IMO Lookup */}
+          <div className="mb-6 p-5 rounded-xl border border-gold/30 bg-gold/5">
+            <p className="text-[13px] font-semibold text-dark mb-3">
+              {t("imoLookupTitle")}
+            </p>
+            <div className="flex gap-3 items-start">
+              <div className="flex-1">
+                <input
+                  className={inputClass}
+                  value={(data.vesselIMO as string) || ""}
+                  onChange={(e) => { update("vesselIMO", e.target.value); setImoLookup("idle"); setImoError(""); }}
+                  placeholder="Ex: 1012345"
+                  maxLength={7}
+                />
+              </div>
+              <button
+                onClick={lookupIMO}
+                disabled={imoLookup === "loading"}
+                className="px-5 py-3 rounded-[10px] text-xs font-semibold uppercase tracking-[0.1em] text-white cursor-pointer transition-all disabled:opacity-50 whitespace-nowrap"
+                style={{ background: "var(--color-gold)" }}
+              >
+                {imoLookup === "loading" ? "Recherche..." : t("imoLookupBtn")}
+              </button>
+            </div>
+            {imoError && (
+              <p className="mt-2 text-xs text-red">{imoError}</p>
+            )}
+            {imoLookup === "success" && (
+              <p className="mt-2 text-xs text-green">
+                {t("imoLookupSuccess", { count: filledFields.length })}
+              </p>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField label={t("vesselName")} required>
-              <input className={inputClass} value={(data.vesselName as string) || ""} onChange={(e) => update("vesselName", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselName") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselName as string) || ""} onChange={(e) => update("vesselName", e.target.value)} />
             </FormField>
             <FormField label={t("vesselType")} required>
-              <select className={selectClass} value={(data.vesselType as string) || ""} onChange={(e) => update("vesselType", e.target.value)}>
+              <select className={`${selectClass} ${filledFields.includes("vesselType") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselType as string) || ""} onChange={(e) => update("vesselType", e.target.value)}>
                 <option value="">—</option>
                 <option value="motor">{t("vesselTypeMotor")}</option>
                 <option value="sail">{t("vesselTypeSail")}</option>
               </select>
             </FormField>
             <FormField label={t("vesselBuilder")} required>
-              <input className={inputClass} value={(data.vesselBuilder as string) || ""} onChange={(e) => update("vesselBuilder", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselBuilder") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselBuilder as string) || ""} onChange={(e) => update("vesselBuilder", e.target.value)} />
             </FormField>
             <FormField label={t("vesselYear")} required>
-              <input className={inputClass} value={(data.vesselYear as string) || ""} onChange={(e) => update("vesselYear", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselYear") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselYear as string) || ""} onChange={(e) => update("vesselYear", e.target.value)} />
             </FormField>
             <FormField label={t("vesselFlag")} required>
-              <input className={inputClass} value={(data.vesselFlag as string) || ""} onChange={(e) => update("vesselFlag", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselFlag") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselFlag as string) || ""} onChange={(e) => update("vesselFlag", e.target.value)} />
             </FormField>
             <FormField label={t("vesselLength")} required>
-              <input className={inputClass} value={(data.vesselLength as string) || ""} onChange={(e) => update("vesselLength", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselLength") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselLength as string) || ""} onChange={(e) => update("vesselLength", e.target.value)} />
             </FormField>
             <FormField label={t("vesselBeam")} required>
-              <input className={inputClass} value={(data.vesselBeam as string) || ""} onChange={(e) => update("vesselBeam", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselBeam") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselBeam as string) || ""} onChange={(e) => update("vesselBeam", e.target.value)} />
             </FormField>
             <FormField label={t("vesselTonnage")}>
-              <input className={inputClass} value={(data.vesselTonnage as string) || ""} onChange={(e) => update("vesselTonnage", e.target.value)} />
-            </FormField>
-            <FormField label={t("vesselIMO")}>
-              <input className={inputClass} value={(data.vesselIMO as string) || ""} onChange={(e) => update("vesselIMO", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselTonnage") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselTonnage as string) || ""} onChange={(e) => update("vesselTonnage", e.target.value)} />
             </FormField>
             <FormField label={t("vesselPortRegistry")}>
-              <input className={inputClass} value={(data.vesselPortRegistry as string) || ""} onChange={(e) => update("vesselPortRegistry", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselPortRegistry") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselPortRegistry as string) || ""} onChange={(e) => update("vesselPortRegistry", e.target.value)} />
             </FormField>
             <FormField label={t("vesselHomePort")} required>
-              <input className={inputClass} value={(data.vesselHomePort as string) || ""} onChange={(e) => update("vesselHomePort", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselHomePort") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselHomePort as string) || ""} onChange={(e) => update("vesselHomePort", e.target.value)} />
             </FormField>
             <FormField label={t("vesselMaterial")} required>
-              <input className={inputClass} value={(data.vesselMaterial as string) || ""} onChange={(e) => update("vesselMaterial", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselMaterial") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselMaterial as string) || ""} onChange={(e) => update("vesselMaterial", e.target.value)} />
             </FormField>
             <FormField label={t("vesselValue")} required>
               <input className={inputClass} value={(data.vesselValue as string) || ""} onChange={(e) => update("vesselValue", e.target.value)} placeholder="€" />
             </FormField>
             <FormField label={t("vesselPassengers")}>
-              <input className={inputClass} value={(data.vesselPassengers as string) || ""} onChange={(e) => update("vesselPassengers", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselPassengers") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselPassengers as string) || ""} onChange={(e) => update("vesselPassengers", e.target.value)} />
             </FormField>
             <FormField label={t("vesselClass")}>
-              <input className={inputClass} value={(data.vesselClass as string) || ""} onChange={(e) => update("vesselClass", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselClass") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselClass as string) || ""} onChange={(e) => update("vesselClass", e.target.value)} />
             </FormField>
             <FormField label={t("vesselEngines")} full>
-              <input className={inputClass} value={(data.vesselEngines as string) || ""} onChange={(e) => update("vesselEngines", e.target.value)} />
+              <input className={`${inputClass} ${filledFields.includes("vesselEngines") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselEngines as string) || ""} onChange={(e) => update("vesselEngines", e.target.value)} />
             </FormField>
           </div>
         </div>

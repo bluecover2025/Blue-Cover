@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/genai": "^1.48.0",
     "@hookform/resolvers": "^5.2.2",
     "next": "^15.5.14",
     "next-intl": "^4.8.4",
