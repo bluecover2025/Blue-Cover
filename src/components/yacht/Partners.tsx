@@ -2,16 +2,20 @@
 
 import { useTranslations } from "next-intl";
 
-const PARTNER_NAMES = [
-  "Pantaenius",
-  "Howden",
-  "Beazley",
-  "Zurich",
-  "Generali",
-  "Allianz",
-  "Helvetia",
-  "RSA",
-  "Lloyd's",
+const PARTNER_LOGOS = [
+  { name: "Beazley", src: "/logos/logos assureurs/beazley.png" },
+  { name: "Zurich", src: "/logos/logos assureurs/zurich.png" },
+  { name: "Generali", src: "/logos/logos assureurs/generali.png" },
+  { name: "Allianz", src: "/logos/logos assureurs/allianz.png" },
+  { name: "Helvetia", src: "/logos/logos assureurs/helvetia.png" },
+  { name: "Lloyd's", src: "/logos/logos assureurs/lloyds.png" },
+  { name: "AXA", src: "/logos/logos assureurs/axa.png" },
+  { name: "Hiscox", src: "/logos/logos assureurs/hiscox.png" },
+  { name: "Chubb", src: "/logos/logos assureurs/chubb.png" },
+  { name: "HDI", src: "/logos/logos assureurs/hdi.png" },
+  { name: "AIG", src: "/logos/logos assureurs/aig.png" },
+  { name: "Liberty", src: "/logos/logos assureurs/liberty.png" },
+  { name: "Vaudoise", src: "/logos/logos assureurs/vaudoise.png" },
 ];
 
 export default function Partners() {
@@ -30,14 +34,17 @@ export default function Partners() {
         }}
       >
         <div className="flex w-max animate-scroll items-center">
-          {[...PARTNER_NAMES, ...PARTNER_NAMES].map((name, i) => (
+          {[...PARTNER_LOGOS, ...PARTNER_LOGOS].map((logo, i) => (
             <div
-              key={`${name}-${i}`}
-              className="mx-5 flex h-[60px] w-[140px] shrink-0 items-center justify-center rounded-xl border border-stone px-5 transition-all hover:shadow-md"
+              key={`${logo.name}-${i}`}
+              className="mx-6 flex h-[60px] w-[120px] shrink-0 items-center justify-center"
             >
-              <span className="text-sm font-semibold text-navy/50 hover:text-navy/80 transition-colors">
-                {name}
-              </span>
+              <img
+                src={logo.src}
+                alt={logo.name}
+                title={logo.name}
+                className="max-w-full h-[36px] object-contain opacity-70 transition-opacity duration-300 hover:opacity-100"
+              />
             </div>
           ))}
         </div>
