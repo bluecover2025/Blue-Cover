@@ -12,7 +12,8 @@
       "Bash(cp -r yachting-tmp/package.json yachting-tmp/package-lock.json yachting-tmp/postcss.config.mjs yachting-tmp/tsconfig.json yachting-tmp/public yachting-tmp/src yachting/)",
       "Bash(npm install:*)",
       "Bash(npx next:*)",
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npm run:*)"
     ]
   }
 }
