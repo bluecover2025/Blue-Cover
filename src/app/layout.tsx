@@ -31,13 +31,30 @@ export const metadata: Metadata = {
     "Blue Cover compare les offres des meilleurs assureurs internationaux de yachts. Devis gratuit sous 48h. Courtier agréé FINMA F01445236 / ORIAS 24000663.",
 };
 
+async function loadLocaleData() {
+  let locale: string;
+  try {
+    locale = await getLocale();
+  } catch {
+    locale = "fr";
+  }
+
+  let messages;
+  try {
+    messages = await getMessages();
+  } catch {
+    messages = (await import(`../messages/${locale}.json`)).default;
+  }
+
+  return { locale, messages };
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  const { locale, messages } = await loadLocaleData();
 
   return (
     <html
@@ -45,7 +62,7 @@ export default async function RootLayout({
       className={`${cormorant.variable} ${barlow.variable} ${barlowCondensed.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>
       </body>
