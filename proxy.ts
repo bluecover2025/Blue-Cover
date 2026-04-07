@@ -9,7 +9,7 @@ function resolveLocale(request: NextRequest): string {
   return DEFAULT_LOCALE;
 }
 
-export default function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const locale = resolveLocale(request);
   const response = NextResponse.next();
 
