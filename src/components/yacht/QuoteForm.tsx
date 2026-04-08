@@ -487,10 +487,10 @@ export default function QuoteForm() {
               {t("coveragesTitle")} <span className="text-gold">*</span>
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              {(["covHM", "covPI", "covCrew", "covCharter", "covMedevac"] as const).map((cov) => (
+              {(["covHM", "covPI", "covCrew"] as const).map((cov) => (
                 <label
                   key={cov}
-                  className="flex items-center gap-2 px-3.5 py-2.5 rounded-[10px] border border-stone cursor-pointer transition-all hover:border-opal text-[13px] font-medium text-dark"
+                  className="flex items-center gap-2 text-[13px] font-medium text-dark cursor-pointer"
                 >
                   <input
                     type="checkbox"

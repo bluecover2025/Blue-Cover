@@ -5,9 +5,8 @@ import { useTranslations } from "next-intl";
 import Logo from "@/components/ui/Logo";
 
 const footerLinks = [
-  { labelKey: "about", href: "#" },
-  { labelKey: "coverages", href: "#coverages" },
-  { labelKey: "faq", href: "#faq" },
+  { labelKey: "about", href: "/yacht#about" },
+  { labelKey: "faq", href: "/yacht#faq" },
   { labelKey: "contact", href: "mailto:hello@bluecover.ch" },
   { labelKey: "legal", href: "/yacht/legal" },
 ] as const;
