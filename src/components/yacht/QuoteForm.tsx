@@ -239,50 +239,10 @@ export default function QuoteForm() {
         ))}
       </div>
 
-      {/* Step 1: Assured & Owner */}
+      {/* Step 1: The Vessel */}
       {step === 1 && (
         <div>
-          <StepHeader num={1} title={t("step1Title")} />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label={t("assuredName")} required full>
-              <input className={inputClass} value={(data.assuredName as string) || ""} onChange={(e) => update("assuredName", e.target.value)} />
-            </FormField>
-            <FormField label={t("assuredAddress")} required full>
-              <input className={inputClass} value={(data.assuredAddress as string) || ""} onChange={(e) => update("assuredAddress", e.target.value)} />
-            </FormField>
-            <FormField label={t("assuredCity")} required>
-              <input className={inputClass} value={(data.assuredCity as string) || ""} onChange={(e) => update("assuredCity", e.target.value)} />
-            </FormField>
-            <FormField label={t("assuredCountry")} required>
-              <input className={inputClass} value={(data.assuredCountry as string) || ""} onChange={(e) => update("assuredCountry", e.target.value)} />
-            </FormField>
-          </div>
-
-          <div className="mt-8 mb-4 text-sm font-bold text-navy">{t("uboTitle")}</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label={t("uboName")} required>
-              <input className={inputClass} value={(data.uboName as string) || ""} onChange={(e) => update("uboName", e.target.value)} />
-            </FormField>
-            <FormField label={t("uboDob")} required>
-              <input type="date" className={inputClass} value={(data.uboDob as string) || ""} onChange={(e) => update("uboDob", e.target.value)} />
-            </FormField>
-            <FormField label={t("uboNationality")} required>
-              <input className={inputClass} value={(data.uboNationality as string) || ""} onChange={(e) => update("uboNationality", e.target.value)} />
-            </FormField>
-            <FormField label={t("uboEmail")} required>
-              <input type="email" className={inputClass} value={(data.uboEmail as string) || ""} onChange={(e) => update("uboEmail", e.target.value)} />
-            </FormField>
-            <FormField label={t("uboPhone")} required>
-              <input type="tel" className={inputClass} value={(data.uboPhone as string) || ""} onChange={(e) => update("uboPhone", e.target.value)} />
-            </FormField>
-          </div>
-        </div>
-      )}
-
-      {/* Step 2: The Vessel */}
-      {step === 2 && (
-        <div>
-          <StepHeader num={2} title={t("step2Title")} />
+          <StepHeader num={1} title={t("step2Title")} />
 
           {/* Vessel Search */}
           <div className="mb-6 p-5 rounded-xl border border-gold/30 bg-gold/5 relative" ref={dropdownRef}>
@@ -424,6 +384,46 @@ export default function QuoteForm() {
             </FormField>
             <FormField label={t("vesselEngines")} full>
               <input className={`${inputClass} ${filledFields.includes("vesselEngines") ? "border-green/50 bg-green/5" : ""}`} value={(data.vesselEngines as string) || ""} onChange={(e) => update("vesselEngines", e.target.value)} />
+            </FormField>
+          </div>
+        </div>
+      )}
+
+      {/* Step 2: Assured & Owner */}
+      {step === 2 && (
+        <div>
+          <StepHeader num={2} title={t("step1Title")} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField label={t("assuredName")} required full>
+              <input className={inputClass} value={(data.assuredName as string) || ""} onChange={(e) => update("assuredName", e.target.value)} />
+            </FormField>
+            <FormField label={t("assuredAddress")} required full>
+              <input className={inputClass} value={(data.assuredAddress as string) || ""} onChange={(e) => update("assuredAddress", e.target.value)} />
+            </FormField>
+            <FormField label={t("assuredCity")} required>
+              <input className={inputClass} value={(data.assuredCity as string) || ""} onChange={(e) => update("assuredCity", e.target.value)} />
+            </FormField>
+            <FormField label={t("assuredCountry")} required>
+              <input className={inputClass} value={(data.assuredCountry as string) || ""} onChange={(e) => update("assuredCountry", e.target.value)} />
+            </FormField>
+          </div>
+
+          <div className="mt-8 mb-4 text-sm font-bold text-navy">{t("uboTitle")}</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField label={t("uboName")} required>
+              <input className={inputClass} value={(data.uboName as string) || ""} onChange={(e) => update("uboName", e.target.value)} />
+            </FormField>
+            <FormField label={t("uboDob")} required>
+              <input type="date" className={inputClass} value={(data.uboDob as string) || ""} onChange={(e) => update("uboDob", e.target.value)} />
+            </FormField>
+            <FormField label={t("uboNationality")} required>
+              <input className={inputClass} value={(data.uboNationality as string) || ""} onChange={(e) => update("uboNationality", e.target.value)} />
+            </FormField>
+            <FormField label={t("uboEmail")} required>
+              <input type="email" className={inputClass} value={(data.uboEmail as string) || ""} onChange={(e) => update("uboEmail", e.target.value)} />
+            </FormField>
+            <FormField label={t("uboPhone")} required>
+              <input type="tel" className={inputClass} value={(data.uboPhone as string) || ""} onChange={(e) => update("uboPhone", e.target.value)} />
             </FormField>
           </div>
         </div>
