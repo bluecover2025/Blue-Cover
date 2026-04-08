@@ -8,7 +8,7 @@ export default function HowItWorks() {
   const steps = ["01", "02", "03", "04"] as const;
 
   return (
-    <section id="how-it-works" className="px-6 py-20 bg-white border-t border-navy/6">
+    <section id="about" className="px-6 py-20 bg-white border-t border-navy/6">
       <div className="mx-auto max-w-[1100px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
           {/* Left: Steps */}
