@@ -18,16 +18,6 @@ const services = [
     icon: "👥",
     image: "https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=600&q=80",
   },
-  {
-    key: "svc4",
-    icon: "📊",
-    image: "https://images.unsplash.com/photo-1605281317010-fe5fffff7eb1?w=600&q=80",
-  },
-  {
-    key: "svc5",
-    icon: "🚁",
-    image: "https://images.unsplash.com/photo-1559825481-12a05cc00344?w=600&q=80",
-  },
 ];
 
 export default function Services() {
