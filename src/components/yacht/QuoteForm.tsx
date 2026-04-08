@@ -242,7 +242,7 @@ export default function QuoteForm() {
       {/* Step 1: The Vessel */}
       {step === 1 && (
         <div>
-          <StepHeader num={1} title={t("step2Title")} />
+          <StepHeader num={1} title={t("step1Title")} />
 
           {/* Vessel Search */}
           <div className="mb-6 p-5 rounded-xl border border-gold/30 bg-gold/5 relative" ref={dropdownRef}>
@@ -392,7 +392,7 @@ export default function QuoteForm() {
       {/* Step 2: Assured & Owner */}
       {step === 2 && (
         <div>
-          <StepHeader num={2} title={t("step1Title")} />
+          <StepHeader num={2} title={t("step2Title")} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField label={t("assuredName")} required full>
               <input className={inputClass} value={(data.assuredName as string) || ""} onChange={(e) => update("assuredName", e.target.value)} />
