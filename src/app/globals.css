@@ -14,8 +14,8 @@
   --color-amber: #D97706;
   --color-red: #DC2626;
 
-  --font-serif: var(--font-montserrat);
-  --font-sans: var(--font-inter);
+  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-barlow);
   --font-condensed: var(--font-barlow-condensed);
 }
 
