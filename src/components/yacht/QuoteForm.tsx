@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -148,16 +148,11 @@ export default function QuoteForm() {
     setSearchStatus("success");
   };
 
-  const searchVessel = async () => {
-    const query = searchQuery.trim();
-    if (query.length < 2) {
-      setSearchError(t("searchMinChars"));
-      return;
-    }
+  const runSearch = useCallback(async (query: string) => {
+    if (query.length < 3) return;
     setSearchStatus("loading");
     setSearchError("");
     setSearchResults([]);
-    setFilledFields([]);
     setShowDropdown(false);
     try {
       const resp = await fetch("/api/ai/vessel-search", {
@@ -188,7 +183,36 @@ export default function QuoteForm() {
       setSearchError(t("searchConnectionError"));
       setSearchStatus("error");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t]);
+
+  const searchVessel = () => {
+    const query = searchQuery.trim();
+    if (query.length < 2) {
+      setSearchError(t("searchMinChars"));
+      return;
+    }
+    setFilledFields([]);
+    runSearch(query);
   };
+
+  // Debounced auto-search as user types (800ms delay, min 3 chars)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    const q = searchQuery.trim();
+    if (q.length < 3) {
+      setSearchResults([]);
+      setShowDropdown(false);
+      return;
+    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      runSearch(q);
+    }, 800);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [searchQuery, runSearch]);
 
   const next = () => setStep((s) => Math.min(s + 1, TOTAL_STEPS));
   const prev = () => setStep((s) => Math.max(s - 1, 1));
